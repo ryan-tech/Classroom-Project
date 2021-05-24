@@ -2,7 +2,7 @@ package com.TechBee.Classroom;
 import java.util.*;
 
 public class UI {
-	public ArrayList<Student> students = new ArrayList<Student>(10);
+	public static ArrayList<Student> students = new ArrayList<Student>(10);
 	
 	Boolean addStudent(int uniqueId) {
 		
@@ -44,6 +44,17 @@ public class UI {
 		return true;
 	}
 	
+	Boolean removeStudent(int id) {
+		for(Student student : students) {
+			if(student.getStudentId() == id) {
+				// found student
+				// remove
+				return students.remove(student);
+			}
+		}
+		return false;
+	}
+	
 	public static void main(String args[]) {
 		UI ui = new UI();
 		Scanner obj = new Scanner(System.in);
@@ -62,14 +73,15 @@ public class UI {
 			switch(input) {
 				case "a":
 					// Check if the classroom is full
-					if(ui.students.size() == 10) {
-						System.out.println("Classroom is full. Unable to add student");
+					if(students.size() == 10) {
+						System.err.println("Classroom is full. Unable to add student.");
 						break;
 					}
 					// Proceed to adding a student
 					else {
 						System.out.println("Please enter a unique student ID.");
 						int studentId = obj.nextInt();
+						obj.nextLine(); // skip the newline
 						if(ui.addStudent(studentId)) {
 							System.out.println("Student successfully added.");
 						}
@@ -80,13 +92,48 @@ public class UI {
 					break;
 				case "r":
 					// remove a student
+					if(students.isEmpty()) {
+						System.err.println("Classroom is empty. Unable to remove student.");
+						break;
+					}
+					else {
+						System.out.println("Please enter a unique student ID.");
+						int studentId = obj.nextInt();
+						obj.nextLine(); // skip the newline
+						if(ui.removeStudent(studentId)) {
+							System.out.println("Removed student.");
+						}
+						else{
+							System.err.println("Student not found.");
+						}
+					}
 				case "u":
+					if(students.isEmpty()) {
+						System.err.println("Classroom is empty.");
+						break;
+					}
 					// update a student
+					// Remove, then re add the student's info
+					System.out.println("Please enter a unique student ID.");
+					int studentId = obj.nextInt();
+					obj.nextLine(); // skip the newline
+					if(ui.removeStudent(studentId)) {
+						// add the student again
+						ui.addStudent(studentId);
+					}
+					else{
+						System.err.println("Student not found.");
+					}
 				case "l":
 					// list all students
-					System.out.println("First name | Last Name | Phone | SSN | GPA | ID | Email Address");
-					for(Student student : ui.students) {
-						System.out.println(student.getFirstName() + " " + student.getLastName() + " " + student.getPhoneNumber() + " " + student.getSsn() + " " + student.getGpa() + " " + student.getStudentId() + " " + student.getEmailAddress());
+					for(Student student : students) {
+						System.out.println("------------------------------------");
+						System.out.println("Name: " + student.getFirstName() + " " + student.getLastName());
+						System.out.println("Phone Number: " + student.getPhoneNumber());
+						System.out.println("Social Security: " + student.getSsn());
+						System.out.println("GPA: " + student.getGpa());
+						System.out.println("ID: " + student.getStudentId());
+						System.out.println("Email Address: " + student.getEmailAddress());
 					}
 					break;
 				default:
