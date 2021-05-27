@@ -27,12 +27,20 @@ public class Student {
 	public String getFirstName() {
 		return firstName;
 	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
 	public void setFirstName() {
 		System.out.println("Enter the student's first name.");
 		this.firstName = scanner.nextLine();
 	}
 	public String getLastName() {
 		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public void setLastName() {
 		System.out.println("Enter the student's last name.");
@@ -41,6 +49,10 @@ public class Student {
 	public long getPhoneNumber() {
 		return phoneNumber;
 	}
+	public void setPhoneNumber(long phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public void setPhoneNumber() {
 		System.out.println("Enter the student's phone number.");
 		// handle long and newline
@@ -48,11 +60,13 @@ public class Student {
 			this.phoneNumber = scanner.nextLong();
 			scanner.nextLine();
 		}
-
-
 	}
+
 	public long getSsn() {
 		return ssn;
+	}
+	public void setSsn(long ssn) {
+		this.ssn = ssn;
 	}
 	public void setSsn() {
 		System.out.println("Enter the student's social security number.");
@@ -65,6 +79,10 @@ public class Student {
 	public float getGpa() {
 		return gpa;
 	}
+	public void setGpa(float gpa) {
+		this.gpa = gpa;
+	}
+
 	public void setGpa() {
 		System.out.println("Enter the student's gpa.");
 		// handle float and newline
@@ -81,6 +99,9 @@ public class Student {
 	}
 	public String getEmailAddress() {
 		return emailAddress;
+	}
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 	public void setEmailAddress() {
 		System.out.println("Enter the student's email address.");
