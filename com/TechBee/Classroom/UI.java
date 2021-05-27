@@ -1,10 +1,12 @@
 package com.TechBee.Classroom;
+import java.sql.SQLException;
 import java.util.*;
 
 public class UI {
 
-	public static void main(String args[]) {
+	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 		DAOClass daoClass = new DAOClass();
+		MySQLDAO sqlDAO = new MySQLDAO();
 
 		Scanner obj = new Scanner(System.in);
 
