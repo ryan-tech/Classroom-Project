@@ -24,7 +24,7 @@ public class UI {
 			switch(input) {
 				case "a":
 					// Check if the classroom is full
-					if(daoClass.students.size() == 10) {
+					if(sqlDAO.numStudents() == 10) {
 						System.err.println("Classroom is full. Unable to add student.");
 						break;
 					}
@@ -33,7 +33,7 @@ public class UI {
 						System.out.println("Please enter a unique student ID.");
 						int studentId = obj.nextInt();
 						obj.nextLine(); // skip the newline
-						if(daoClass.addStudent(studentId)) {
+						if(sqlDAO.addStudent(studentId)) {
 							System.out.println("Student successfully added.");
 						}
 						else{
@@ -43,14 +43,14 @@ public class UI {
 					break;
 				case "r":
 					// remove a student
-					if(daoClass.students.isEmpty()) {
+					if(sqlDAO.numStudents() == 0) {
 						System.err.println("Classroom is empty. Unable to remove student.");
 					}
 					else {
 						System.out.println("Please enter a unique student ID.");
 						int studentId = obj.nextInt();
 						obj.nextLine(); // skip the newline
-						if(daoClass.removeStudent(studentId)) {
+						if(sqlDAO.removeStudent(studentId)) {
 							System.out.println("Removed student.");
 						}
 						else{
@@ -59,7 +59,7 @@ public class UI {
 					}
 					break;
 				case "u":
-					if(daoClass.students.isEmpty()) {
+					if(sqlDAO.numStudents() == 0) {
 						System.err.println("Classroom is empty.");
 						break;
 					}
@@ -68,13 +68,13 @@ public class UI {
 					System.out.println("Please enter a unique student ID.");
 					int studentId = obj.nextInt();
 					obj.nextLine(); // skip the newline
-					if(!daoClass.updateStudent(studentId)) {
+					if(!sqlDAO.updateStudent(studentId)) {
 						System.err.println("Student not found.");
 					}
 					break;
 				case "l":
 					// list all students
-					daoClass.listStudents();
+					sqlDAO.listStudents();
 					break;
 				default:
 					break;

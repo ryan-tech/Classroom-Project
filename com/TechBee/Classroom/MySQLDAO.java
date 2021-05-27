@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 public class MySQLDAO implements MySQLDAOInterface {
 
@@ -53,6 +54,11 @@ public class MySQLDAO implements MySQLDAOInterface {
 * */
 
     public Boolean addStudent(int uniqueId) throws SQLException {
+        // if not unique then return false
+        if(!isUniqueId(uniqueId)) {
+            return false;
+        }
+
         // Create new student with the unique id
         Student newStudent = new Student();
         newStudent.setFirstName();
@@ -65,50 +71,98 @@ public class MySQLDAO implements MySQLDAOInterface {
 
         // create update
         String query = "INSERT INTO classroom " +
-            "VALUES (" +
-            newStudent.getFirstName() +
-            newStudent.getLastName() +
-            newStudent.getPhoneNumber() +
-            newStudent.getSsn() +
-            newStudent.getGpa() +
-            newStudent.getStudentId() +
+            "VALUES (\"" +
+            newStudent.getFirstName() + "\", \"" +
+            newStudent.getLastName() + "\", " +
+            newStudent.getPhoneNumber() + ", " +
+            newStudent.getSsn() + ", " +
+            newStudent.getGpa() + ", " +
+            newStudent.getStudentId() + ", \"" +
             newStudent.getEmailAddress() +
-            ");";
-
+            "\");";
+        System.out.println(query);
         Statement sqlCode = conn.createStatement();
         sqlCode.executeUpdate(query);
         return true;
     }
     public Boolean removeStudent(int uniqueId) throws SQLException {
+        // if it is unique, that means a student doesn't exist with that id already
+        if(isUniqueId(uniqueId)) {
+            return false;
+        }
         String query = "DELETE FROM classroom " +
-                "WHERE id=" +
-                uniqueId +
-                ");"
+                "WHERE studentId = " + uniqueId + ";"
                 ;
 
         Statement sqlCode = conn.createStatement();
-        sqlCode.executeQuery(query);
+        sqlCode.executeUpdate(query);
         return true;
     }
-    public Boolean updateStudent(Student s){
-        return true;
-    }
-    public void listStudents()
-    {
+    public Boolean updateStudent(int uniqueId) throws SQLException {
+        // if is unique, then that means a student with the id doesn't exist in the db
+        if(isUniqueId(uniqueId)) {
+            return false;
+        }
 
+        // Create new student with the unique id
+        Student newStudent = new Student();
+        newStudent.setFirstName();
+        newStudent.setLastName();
+        newStudent.setPhoneNumber();
+        newStudent.setSsn();
+        newStudent.setGpa();
+        newStudent.setStudentId(uniqueId);
+        newStudent.setEmailAddress();
+
+        // create update
+        String query = "UPDATE classroom " +
+                "SET " +
+                "firstName = \"" + newStudent.getFirstName() + "\"," +
+                "lastName = \"" + newStudent.getLastName() + "\"," +
+                "phoneNumber = " + newStudent.getPhoneNumber() + ", " +
+                "ssn = " + newStudent.getSsn() + ", " +
+                "gpa = " + newStudent.getGpa() + ", " +
+                "studentId = " + newStudent.getStudentId() + ", " +
+                "emailAddress = \"" + newStudent.getEmailAddress() + "\" " +
+                "WHERE studentId = " + newStudent.getStudentId() + ";";
+        System.out.println(query);
+        Statement sqlCode = conn.createStatement();
+        sqlCode.executeUpdate(query);
+        return true;
+    }
+
+
+    public void listStudents() throws SQLException {
+        Statement stmt = conn.createStatement();
+        String sql = "SELECT * FROM classroom";
+        ResultSet rs = stmt.executeQuery(sql);
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+        // Iterate through the data in the result set and display it.
+        while (rs.next()) {
+            //Print one row
+            for(int i = 1 ; i <= columnsNumber; i++){
+
+                System.out.print(rsmd.getColumnName(i) + ": " + rs.getString(i) + " "); //Print one element of a row
+            }
+            System.out.println();//Move to the next line to print the next row.
+        }
     }
 
     public Boolean isUniqueId(int id) throws SQLException {
         Statement stmt = conn.createStatement();
-        String sql = "SELECT COUNT(*) FROM classroom WHERE id = " + id;
+        String sql = "SELECT COUNT(*) FROM classroom WHERE studentId = " + id;
         ResultSet rs = stmt.executeQuery(sql);
-        return !rs.last(); // returns true/false depending on if a row was returned with a matching id
+        rs.next();
+        return rs.getInt("count(*)") == 0;
+        // returns true/false depending on if a row was returned with a matching id
     }
 
-    public int numStudents(int id) throws SQLException {
+    public int numStudents() throws SQLException {
         Statement stmt = conn.createStatement();
         String sql = "SELECT COUNT(*) FROM classroom";
         ResultSet rs = stmt.executeQuery(sql);
-        return rs.last() ? rs.getRow() : 0; // returns number of rows
+        rs.next();
+        return rs.getInt("count(*)"); // returns number of rows
     }
 }
