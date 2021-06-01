@@ -1,16 +1,15 @@
 package com.TechBee.Classroom;
+
 import java.sql.SQLException;
 import java.util.*;
 
 public class UI {
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
-		DAOClass daoClass = new DAOClass();
 		MySQLDAO sqlDAO = new MySQLDAO();
 
 		Scanner obj = new Scanner(System.in);
 
-		boolean running = true;
 		while(true) {
 			System.out.println("Would you like to (a)dd a student, "
 					+ "(r)emove a student, (u)pdate a student, (l)ist all students, or (q)uit?");
@@ -18,7 +17,6 @@ public class UI {
 			System.out.println(input);
 			if(input.equals("q")) {
 				System.out.println("Exiting the program.");
-				running = false;
 				break;
 			}
 			switch(input) {
@@ -34,10 +32,10 @@ public class UI {
 						int studentId = obj.nextInt();
 						obj.nextLine(); // skip the newline
 						if(sqlDAO.addStudent(studentId)) {
-							System.out.println("Student successfully added.");
+							System.out.println("com.TechBee.Classroom.Student successfully added.");
 						}
 						else{
-							System.err.println("Student with id " + studentId + " already exists.");
+							System.err.println("com.TechBee.Classroom.Student with id " + studentId + " already exists.");
 						}
 					}
 					break;
@@ -54,7 +52,7 @@ public class UI {
 							System.out.println("Removed student.");
 						}
 						else{
-							System.err.println("Student not found.");
+							System.err.println("com.TechBee.Classroom.Student not found.");
 						}
 					}
 					break;
@@ -69,7 +67,7 @@ public class UI {
 					int studentId = obj.nextInt();
 					obj.nextLine(); // skip the newline
 					if(!sqlDAO.updateStudent(studentId)) {
-						System.err.println("Student not found.");
+						System.err.println("com.TechBee.Classroom.Student not found.");
 					}
 					break;
 				case "l":
